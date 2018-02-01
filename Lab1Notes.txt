@@ -1,0 +1,16 @@
+Week 2 Part 1
+gpio readall- displays table of all avadiable pins
+gpio -g mode BCM (in- input or out- output)
+gpio -g write BCM (1 for High and 0 for Low)
+
+gpio mode wPi (in or out)
+gpio write wPi (1 or 0)
+
+Button 1 BCM= 16
+Not pushing button= 0
+holding button= 1
+
+pullUpDnControl()== Command Line gpio -g mode 16 (up- always 1 or down- always 0)
+
+Week 2 Part 2
+
