@@ -13,4 +13,25 @@ holding button= 1
 pullUpDnControl()== Command Line gpio -g mode 16 (up- always 1 or down- always 0)
 
 Week 2 Part 2
+https://gist.github.com/itrobotics/bcee041bf84f758cb6ba- example I found online
+rsync -av Makefile pi@128.206.19.15:workspace/Lab1Week2/src
+header file needed for ioremap() #include <asm/io.h>
 
+
+                        GPFSEL0  -
+                                  |
+wiringPiSetup()-> map to 3F20000 <-
+
+pinmode->set input/output
+Dwrite-> (H)igh/(L)ow or 1/0
+
+Numbers in Sets of 3 XXX XXX XXX XXX
+or
+Number in Sets of 4 XXXX XXXX XXXX
+0X040
+address   value
+*ptr=*ptr/0*40;
+
+unsigned long* 0X40
+uint 32*
+ptr=ptr+0X1C/4 to traverse pointers
