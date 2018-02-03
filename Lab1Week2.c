@@ -7,25 +7,48 @@
  Description : Hello World in C, Ansi-style
  ============================================================================
  */
+
 #include <asm/io.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <linux/printk.h>
+#include <linux/module.h>
+#include <linux/kernel.h>
 
-#define LED1  8		// wiringPi number corresponding to GPIO2. RED
-					//Check Figures 2 and 3 in the Lab9 guide.
-#define LED2  9		//YELLOW
-#define LED3  7		//GREEN
-#define LED4  21	//BLUE
+#ifndef MODULE
+#define MODULE
+#endif
 
-
-//sudo insmod Lab1Week2.ko
-//sudo rmmod Lab1Week2
-
+#ifndef __KERNEL__
+#define __KERNEL__
+#endif
 
 
+MODULE_LICENSE("GPL");
 
 
-int main(void) {
-	puts(""); /* prints  */
-	return EXIT_SUCCESS;
+int init_module(void)
+{
+	// your code here
+	printk("Loading...");
+	//pointer to hold
+	unsigned long *SelectPin= (unsigned long)*ioremap((0x3F200000),4096);
+	iowrite32((*SelectPin | 0x00049240), SelectPin);
+	SelectPin+=7;
+	iowrite((0x0000003C),SelectPin);
+	printk("Loading Done!");
+
+	return 0;
 }
+
+void cleanup_module(void)
+{
+	// your code here
+	printk("Stopping...");
+	unsigned long *SelectPin= (unsigned long)*ioremap((0x3F200000),4096);
+	iowrite32((*SelectPin | 0x00049240), SelectPin);
+	SelectPin+=10;
+	iowrite((0x0000003C),SelectPin);
+	printk("Stopped");
+}
+
+MODULE_init(init_module);
+MODULE_exit(cleanup_module);
