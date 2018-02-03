@@ -20,7 +20,7 @@ header file needed for ioremap() #include <asm/io.h>
 
                         GPFSEL0  -
                                   |
-wiringPiSetup()-> map to 3F20000 <-
+wiringPiSetup()-> map to 3F200000 <-
 
 pinmode->set input/output
 Dwrite-> (H)igh/(L)ow or 1/0
