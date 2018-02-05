@@ -32,7 +32,7 @@ int init_module(void)
 	//pointer to hold
 	unsigned long *SelectPin= (unsigned long)*ioremap((0x3F200000),4096);
 	iowrite32((*SelectPin | 0x00049240), SelectPin);
-	SelectPin+=7;
+	SelectPin+=7;//change to GPIO Select
 	iowrite((0x0000003C),SelectPin);
 	printk("Loading Done!");
 
@@ -45,10 +45,11 @@ void cleanup_module(void)
 	printk("Stopping...");
 	unsigned long *SelectPin= (unsigned long)*ioremap((0x3F200000),4096);
 	iowrite32((*SelectPin | 0x00049240), SelectPin);
-	SelectPin+=10;
+	SelectPin+=10;//GPIO Clear
 	iowrite((0x0000003C),SelectPin);
 	printk("Stopped");
 }
 
-MODULE_init(init_module);
-MODULE_exit(cleanup_module);
+/*MODULE_init(init_module);
+MODULE_exit(cleanup_module);*/ 
+//That is only needed if you dont specifiy the name
