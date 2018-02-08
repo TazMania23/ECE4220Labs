@@ -26,9 +26,9 @@
 #define Speaker 22
 
 int main(void) {
-
+	
 	wiringPiSetup();
-
+	//setting up the pins 
 	pinMode(LED1, OUTPUT);
 	pinMode(LED2, OUTPUT);
 
@@ -39,9 +39,10 @@ int main(void) {
 
 	while(digitalRead(Button1)==FALSE)
 	{
-		digitalWrite(LED1,HIGH);
+		digitalWrite(LED1,HIGH);//Led1 on
 		sleep(1);
-		digitalWrite(LED1,LOW);
+		digitalWrite(LED1,LOW);//Led1 off
+		
 		digitalWrite(LED2,HIGH);
 		sleep(1);
 		digitalWrite(LED2,LOW);
