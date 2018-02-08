@@ -46,48 +46,85 @@ int main(void)
 		pullUpDnControl(Speaker, PUD_DOWN);
 
 		int butNum=0;
-
+		int x;
 	printf("Choose button 1-5\nGot 5 seconds to make it happen\n");
 	while(1)
 	{
 		printf("Number: ");
 		scanf("%d",&butNum);
+		getchar();
+		
 		switch (butNum){
 
 			case 1:
-				printf("\nhello");
-					sleep(1);
-					if(digitalRead(Button1)==TRUE)
+				while(1){
+					 if(digitalRead(Button1)==TRUE)
 						{
-							printf("Light\n");
-							while(1)
+							for(x=0;x<1000;x++)
 							{
 								digitalWrite(Speaker, HIGH);
-								usleep(5000);
+								usleep(450);
 								digitalWrite(Speaker, LOW);
+								usleep(450);
 							}
 						}
+					}
 				break;
 
 			case 2:
-					if(digitalRead(Button2)==TRUE)
-						digitalWrite(Speaker, HIGH);
-
+				while(1){
+					 if(digitalRead(Button2)==TRUE)
+						
+							for(x=0;x<1000;x++)
+							{
+								digitalWrite(Speaker, HIGH);
+								usleep(500);
+								digitalWrite(Speaker, LOW);
+								usleep(500);
+							}
+					}
 				break;
 
 			case 3:
-					if(digitalRead(Button3)==TRUE)
-						digitalWrite(Speaker, HIGH);
+				while(1){
+					 if(digitalRead(Button3)==TRUE)
+						
+							for(x=0;x<1000;x++)
+							{
+								digitalWrite(Speaker, HIGH);
+								usleep(450);
+								digitalWrite(Speaker, LOW);
+								usleep(450);
+							}
+					}
 				break;
 
 			case 4:
-					if(digitalRead(Button4)==TRUE)
-						digitalWrite(Speaker, HIGH);
+				while(1){
+					 if(digitalRead(Button4)==TRUE)
+						
+							for(x=0;x<1000;x++)
+							{
+								digitalWrite(Speaker, HIGH);
+								usleep(500);
+								digitalWrite(Speaker, LOW);
+								usleep(500);
+							}
+					}
 				break;
 
 			case 5:
+				while(1){
 					if(digitalRead(Button5)==TRUE)
-						digitalWrite(Speaker, HIGH);
+						
+							for(x=0;x<1000;x++)
+							{
+								digitalWrite(Speaker, HIGH);
+								usleep(450);
+								digitalWrite(Speaker, LOW);
+								usleep(450);
+							}
+					}
 				break;
 
 			default:
