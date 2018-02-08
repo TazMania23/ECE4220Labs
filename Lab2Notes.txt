@@ -1,0 +1,14 @@
+1) Load data from text file
+2) Get current time
+3)Create Threads
+4)Join Threads
+5)Get stop time
+6)Count, examine time
+7)Average
+
+reading in mili seconds
+
+
+
+
+loop around 2-6
