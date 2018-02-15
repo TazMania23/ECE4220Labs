@@ -39,3 +39,4 @@ itval.it_value.tv_nsec = InitTime_nseconds; ->  set this to 100 to avoid errors
 
 T1 & T2 same period
 T3 is half the period as T1 or T2
+sudo./Lab2Week2
