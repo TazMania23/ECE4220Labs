@@ -1,3 +1,4 @@
+Part 1
 1) Load data from text file
 2) Get current time
 3)Create Threads
@@ -13,3 +14,22 @@ matrix file number you were looking fo
 
 
 loop around 2-6
+
+
+
+Part 2
+3 threads In main
+T1-read in 1 line of text file and store it into Common Buffer 1 3
+T2-read in 1 line of text 2 file and store it into common buffer 2 4
+T3- Runs and grabs what in common buffer and stores it into StringArray[20]
+
+T1 T3 T2 T3 T1 T2 T3
+
+1)Elevate priority >50
+2)Create Timer
+3)Structure -> start time ->period
+4)Start Timer set seconds to 0 and ns to 0
+5)Wait one period before running the threads
+6)do what thread was intended to do
+Goal: how quick can this run 
+need to use join
