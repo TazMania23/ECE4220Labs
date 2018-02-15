@@ -33,3 +33,9 @@ T1 T3 T2 T3 T1 T2 T3
 6)do what thread was intended to do
 Goal: how quick can this run 
 need to use join
+sched_setscheduler(0, SCHED_FIFO, &param);-> 0 implies whatever thread the method is used in
+
+itval.it_value.tv_nsec = InitTime_nseconds; ->  set this to 100 to avoid errors
+
+T1 & T2 same period
+T3 is half the period as T1 or T2
