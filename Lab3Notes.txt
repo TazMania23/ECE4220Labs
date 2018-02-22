@@ -1,0 +1,38 @@
+Notes
+For lab Report (other ways to test for stuff)
+
+Only one light can be on at a time
+Green-Light1 Yellow-Light2 Red-ped                                                                                                                                     
+
+1st way is Polled Scheduling
+-set up a queue and go in order loop and see if tasks needs to be done
+-check_button to see if ped is there. 1 if person is there 0 if no one is there
+-after time frame call clear button which will set it to 0;
+sudo insmod ece4220lab3.ko
+sudo ./Lab3_Week1
+
+
+2nd way Priority Scheduling 
+-threads get different priorities 
+-three threads and set priority above kernel and the threads have different proirities
+Posix semaphore (this word sounds weird) www.csc.villanova.edu/-madmin/threads/posixem.html
+1)priority/ act real time
+2) Set times, protect led, infinity loop!!! each thread
+3) control led
+4)Release Protection LED
+priotity in command line argument
+play with both policys
+sudo ./Lab3_Week2 Prior1 Policy1 Prior2 Policy2 Prior3 Policy3
+Priorities bw 1 and 99
+Policy->FIFO=1 RoundRobin(RR)=2
+
+to run
+sudo insmod ece4220lab3.ko
+sudo ./Lab3_Week1
+
+
+Both
+set up gpio properly wiring pi
+Left most pushbutton for cross walk
+
+
