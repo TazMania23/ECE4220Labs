@@ -67,30 +67,59 @@
     return 0;
 }
 */
+typedef struct{
+	int id;
+	int start_s;
+	int start_n;
+	int period_s;
+	int period_n;
+	char fname[15];
+
+}Basic;
+//had to make second struct bc the sum thread will have multiple lines of lyrics
+//not just one
+typedef struct{
+	int id;
+	int start_s;
+	int start_n;
+	int period_s;
+	int period_n;
+	char lyrics[20][100];
+//20 lines with who knows how many charactes, not checking
+}Just_Once;
+
+//where the single sum thread
 void Sumthread(void *ptr){
 
 }
-
+//Where the two threads will be created
 void MultiThreads(void *ptr){
 
 }
 
 int main(argc, *argv[])
 {
-
+	//looping variable
+	int x=0;
+	//getting all the information needed to run
+	Basic vfirst ={1, 0,100000, 0, 400000, "first.txt"};
+	Basic vsecond={2, 0,300000, 0, 400000, "second.txt"};
+	Just_Once vthird ={3,0 200000, 0, 200000, "Blank"};
+	
 	pthread_t thread1,thread2,thread3;
-	int var1=0,var2=0,var3=0;
-
-	pthread_create(&thread1, NULL,(void *)&MultiThreads, (void *)&var1);
-	pthread_create(&thread2, NULL,(void *)&MultiThreads, (void *)&var2);
-	pthread_create(&thread3, NULL,(void *)&Sumthread, (void *)&var3);
+	//thread 1 & 2 go to the multithreads and thread 3 goes to sum
+	pthread_create(&thread1, NULL,(void *)&MultiThreads, (void *)&vfirst);
+	pthread_create(&thread2, NULL,(void *)&MultiThreads, (void *)&vsecond);
+	pthread_create(&thread3, NULL,(void *)&Sumthread, (void *)&vthird);
 
 	pthread_join(thread1,NULL);
 	pthread_join(thread2,NULL);
 	pthread_join(thread3,NULL);
 
-
-
-
+	for(x=0;x<20;x++)
+	{
+		printf("Line %d: %s", x,vthird[x]);	
+	}
+	
 	return 0;
 }
