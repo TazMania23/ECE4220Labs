@@ -18,7 +18,7 @@ Description : Hello World in C, Ansi-style
 typedef struct {
 	
 	int neo_matrix[20][100];	//max txt file length & width
-	int count[100];		
+	int count[250];		
 	int r;
 	int c;
 	int clue;
@@ -34,12 +34,26 @@ void *OneThreadToRuleThemAll(void *ptr) {
 	int x, y;
 	//start
 	printf("\nUsing one thread to find %d", num); //info vs (*info)
-
-	
+	for(x=0;x<rows;x++)
+		for(y=0;y<cols;y++)
+		{
+			if ((*sthreads).neo_matrix[x][y]==num;
+			    ++(*sthreads).count[0];
+		}
+	printf("\n-------- The number %d was found %d times in the matrix --------",clue ,(*sthreads).count[0]);
+	//dont forget to end thread
 	pthread_exit(0);
 }
 void *OneThreadR(void *ptr) {
 
+	//getting info from ptr 
+	sthreads *info = (sthreads*) ptr;
+	int num = (*info).clue;
+	int rows = (*info).r;
+	int cols = (*info).c;
+	
+	
+	
 	pthread_exit(0);
 }
 void *OneThreadC(void *ptr) {
@@ -98,17 +112,34 @@ int main(int argc, char *argv[]) {
 
 	//Setting up the Timers now
 	struct timespec startingT, endingT;
+	unsigned int number;
 	
+	clock_gettime(CLOCK_MONOTONIC, &startingT);
 	
 	//1 thread for whole matrix
 	pthread_t T1;
 	pthread_create(&T1, NULL, (void*)&OneThreadToRuleThemAll, (void*)&hold);
 	pthread_join(T1, NULL);
 
+	clock_gettime(CLOCK_MONOTONIC, &endingT);
+	
+	number=1000000000 *(endingT.tv_sec - startingT.tv_sec)+ endingT.tv_nsec - startingT.tv_nsec;
+	printf("\nOne Thread to search whole matrix took %u ns", number);
+	
+	//since hold is getting passed into everything count must reset after ever thread finishes
+	int reset=0;
+	for(reset=0;reset<250;reset++)
+		hold.count[reset]=0;
+	
 	//1 thread for searching each row
+	
+	
 	pthread_t T2;
 	pthread_create(&T2, NULL, (void*)&OneThreadR, (void*)&hold);
 	pthread_join(T2, NULL);
+	
+	
+	
 	//1 thread for searching each column
 	pthread_t T3;
 	pthread_create(&T3, NULL, (void*)&OneThreadC, (void*)&hold);
