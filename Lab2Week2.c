@@ -90,12 +90,93 @@ typedef struct{
 
 //where the single sum thread
 void Sumthread(void *ptr){
+	
+	int timer=timerfd_create(CLOCK_MONOTONIC, 0);
+	char holdline[100];
+	struct itimerspec itval;
+	struct sched_param param;
+	
+	param.sched_priority = RT_Prority;
+	sched_setscheduler(0, SCHED_FIFO, &param);
+	//holding the struct pointer
+	Just_Once *hold= (hold*)ptr;
+	
+	itval.it_interval.tv_sec= hold->period_s;
+	itval.it_interval.tv_sec= hold->period_n;
+	
+	itval.it_interval.tv_sec= hold->start_s;
+	itval.it_interval.tv_sec= hold->start_n;
+	
+	timerfd_settime(timer, 0, &itval, NULL);
+	
+	uint64_t numPeriods=0;
+	//1 period pause
+	read(timer, &numPeriods, sizeof(numPeriods));
+	int x=0;
+	while(x<20)
+	{
+		strcpy(hold->lyrics[x],holdline);
+		read(timer, &numPeriods, sizeof(numPeriods));
+	}
+	
+	if(numPeriods>1)
+	{
+		printf("\n-----Missed-----");
+		exit(1);
+	}
+	
 
 }
 //Where the two threads will be created
 void MultiThreads(void *ptr){
-
+	
+	// timer setup
+	int timer=timerfd_create(CLOCK_MONOTONIC, 0);
+	char holdline[100];
+	struct itimerspec itval;
+	struct sched_param param;
+	
+	param.sched_priority = RT_Prority;
+	sched_setscheduler(0, SCHED_FIFO, &param);
+	//holding the struct pointer
+	basic *hold= (hold*)ptr;
+	
+	itval.it_interval.tv_sec= hold->period_s;
+	itval.it_interval.tv_sec= hold->period_n;
+	
+	itval.it_interval.tv_sec= hold->start_s;
+	itval.it_interval.tv_sec= hold->start_n;
+	
+	//opening file
+	File *fptr;
+	if(fptr=fopen(hold->fname,"r"))==NULL)
+	{
+		printf("\nFailed to Open File %s", hold->fname);
+		exit(1); //exit fail =1
+	}
+	
+	timerfd_settime(timer, 0, &itval, NULL);
+	
+	uint64_t numPeriods=0;
+	//1 period pause
+	read(timer, &numPeriods, sizeof(numPeriods));
+	
+	while(!feof(fptr))
+	{
+		//finish fscanf
+		fscanf(fptr, "%s", holdline);
+		read(timer, &numPeriods, sizeof(numPeriods));
+	}
+	fclose(fptr);
+	
+	if(numPeriods>1)
+	{
+		printf("\n-----Missed-----");
+		exit(1);
+	}
+	
 }
+
 
 int main(argc, *argv[])
 {
@@ -115,7 +196,7 @@ int main(argc, *argv[])
 	pthread_join(thread1,NULL);
 	pthread_join(thread2,NULL);
 	pthread_join(thread3,NULL);
-
+//print out the song
 	for(x=0;x<20;x++)
 	{
 		printf("Line %d: %s", x,vthird[x]);	
