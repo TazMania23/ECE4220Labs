@@ -191,7 +191,7 @@ for(ArrayLoop=0;ArrayLoop<5;ArrayLoop++)
 
 	clock_gettime(CLOCK_MONOTONIC, &endingT);
 
-	number=1000000000 *(endingT.tv_sec - startingT.tv_sec)+ endingT.tv_nsec - startingT.tv_nsec;
+	number=(1000000000 *(endingT.tv_sec - startingT.tv_sec)+ (endingT.tv_nsec - startingT.tv_nsec));
 	printf("\nOne Thread to search whole matrix took %u ns\n\n", number);
 
 	ArrayAve[0]+=number;
@@ -218,7 +218,7 @@ for(ArrayLoop=0;ArrayLoop<5;ArrayLoop++)
 		pthread_join(T2[x], NULL);
 
 	clock_gettime(CLOCK_MONOTONIC, &endingT);
-	number=1000000000 *(endingT.tv_sec - startingT.tv_sec)+ endingT.tv_nsec - startingT.tv_nsec;
+	number=(1000000000 *(endingT.tv_sec - startingT.tv_sec)+ (endingT.tv_nsec - startingT.tv_nsec));
 
 	printf("\nOne Thread per each row in matrix took %u ns", number);
 
@@ -254,7 +254,7 @@ for(ArrayLoop=0;ArrayLoop<5;ArrayLoop++)
 		pthread_join(T3[x], NULL);
 
 	clock_gettime(CLOCK_MONOTONIC, &endingT);
-	number=1000000000 *(endingT.tv_sec - startingT.tv_sec)+ endingT.tv_nsec - startingT.tv_nsec;
+	number=(1000000000 *(endingT.tv_sec - startingT.tv_sec)+ (endingT.tv_nsec - startingT.tv_nsec));
 	printf("\nOne Thread per each column in matrix took %u ns", number);
 
 	//Sicne theres multiple threads per row to find the total loop all threads and add up
@@ -290,7 +290,7 @@ for(ArrayLoop=0;ArrayLoop<5;ArrayLoop++)
 		pthread_join(T4[x], NULL);
 
 	clock_gettime(CLOCK_MONOTONIC, &endingT);
-	number=1000000000 *(endingT.tv_sec - startingT.tv_sec)+ endingT.tv_nsec - startingT.tv_nsec;
+	number=(1000000000 *(endingT.tv_sec - startingT.tv_sec)+ (endingT.tv_nsec - startingT.tv_nsec));
 	printf("\nOne Thread per each element in matrix took %u ns", number);
 
 	//Sicne theres multiple threads per row to find the total loop all threads and add up
