@@ -25,7 +25,7 @@ typedef struct {
 ;
 }sthreads;
 
-//made another struct, wasnt sure how to differeniate which thread was which
+//made another struct, wasn't sure how to differeniate which thread was which
 typedef struct {
 	//thread id
 	int tid[100];
