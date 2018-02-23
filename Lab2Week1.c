@@ -56,7 +56,7 @@ void *OneThreadToRuleThemAll(void *ptr) {
 		}
 	}
 	printf("\nSearching: %d \tCounts: %d ",num ,(*info).count[0]);
-	//dont forget to end thread
+	//dont forget to end thread and I forgot in week 2
 	pthread_exit(0);
 }
 //accidentally had Rows and Columns flipped both OneThreadR and OneThreadC
