@@ -75,14 +75,15 @@ void Sumthread(void *ptr){
 		strcpy(hold->lyrics[x],holdline);
 		read(timer, &numPeriods, sizeof(numPeriods));
 		x++;
+	
+		printf("Hithere2");
+		if(numPeriods>1)
+		{
+			printf("\n-----Missed-----");
+			exit(1);
+		}
 	}
-	printf("Hithere2");
-	if(numPeriods>1)
-	{
-		printf("\n-----Missed-----");
-		exit(1);
-	}
-
+	pthread
 
 }
 //Where the two threads will be created
