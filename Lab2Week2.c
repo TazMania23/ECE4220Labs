@@ -83,7 +83,7 @@ void Sumthread(void *ptr){
 			exit(1);
 		}
 	}
-	pthread
+	pthread_exit(0);
 
 }
 //Where the two threads will be created
@@ -114,7 +114,7 @@ void MultiThreads(void *ptr){
 		printf("\nFailed to Open File %s", hold->fname);
 		exit(1); //exit fail =1
 	}
-printf("Hello There 2\n");
+	printf("Hello There 2\n");
 	timerfd_settime(timer, 0, &itval, NULL);
 
 	uint64_t numPeriods=0;
@@ -127,15 +127,16 @@ printf("Hello There 2\n");
 		//fscanf(fptr, "%s", holdline);
 		fgets(holdline, 100,fptr);
 		read(timer, &numPeriods, sizeof(numPeriods));
+	
+		fclose(fptr);
+	printf("HelloThere3\n");
+		if(numPeriods>1)
+		{
+			printf("\n-----Missed-----");
+			exit(1);
+		}
 	}
-	fclose(fptr);
-printf("HelloThere3\n");
-	if(numPeriods>1)
-	{
-		printf("\n-----Missed-----");
-		exit(1);
-	}
-
+	pthread_exit(0);
 }
 
 
