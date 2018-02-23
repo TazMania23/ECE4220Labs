@@ -47,7 +47,7 @@ typedef struct{
 
 //where the single sum thread
 void Sumthread(void *ptr){
-	printf("Hi there\n");
+
 	int timer=timerfd_create(CLOCK_MONOTONIC, 0);
 
 	struct itimerspec itval;
@@ -59,11 +59,13 @@ void Sumthread(void *ptr){
 	Just_Once *hold= (Just_Once*)ptr;
 
 	itval.it_interval.tv_sec= hold->period_s;
-	itval.it_interval.tv_sec= hold->period_n;
+	itval.it_interval.tv_nsec= hold->period_n;
 
-	itval.it_interval.tv_sec= hold->start_s;
-	itval.it_interval.tv_sec= hold->start_n;
-	printf("Hithere2\n");
+	itval.it_value.tv_sec= hold->start_s;
+	itval.it_value.tv_nsec= hold->start_n;
+
+	//printf("\nSumThread");
+
 	timerfd_settime(timer, 0, &itval, NULL);
 
 	uint64_t numPeriods=0;
@@ -75,8 +77,8 @@ void Sumthread(void *ptr){
 		strcpy(hold->lyrics[x],holdline);
 		read(timer, &numPeriods, sizeof(numPeriods));
 		x++;
-	
-		printf("Hithere2");
+
+
 		if(numPeriods>1)
 		{
 			printf("\n-----Missed-----");
@@ -88,23 +90,23 @@ void Sumthread(void *ptr){
 }
 //Where the two threads will be created
 void MultiThreads(void *ptr){
-	printf("Hello there\n");
-	// timer setup
-	int timer=timerfd_create(CLOCK_MONOTONIC, 0);
 
 	struct itimerspec itval;
 	struct sched_param param;
-
 	param.sched_priority = MY_PRIORITY;
 	sched_setscheduler(0, SCHED_FIFO, &param);
+	// timer setup
+	int timer=timerfd_create(CLOCK_MONOTONIC, 0);
+
+
 	//holding the struct pointer
 	Basic *hold= (Basic*)ptr;
 
 	itval.it_interval.tv_sec= hold->period_s;
-	itval.it_interval.tv_sec= hold->period_n;
+	itval.it_interval.tv_nsec= hold->period_n;
 
-	itval.it_interval.tv_sec= hold->start_s;
-	itval.it_interval.tv_sec= hold->start_n;
+	itval.it_value.tv_sec= hold->start_s;
+	itval.it_value.tv_nsec= hold->start_n;
 
 	//opening file
 	FILE *fptr;
@@ -114,7 +116,9 @@ void MultiThreads(void *ptr){
 		printf("\nFailed to Open File %s", hold->fname);
 		exit(1); //exit fail =1
 	}
-	printf("Hello There 2\n");
+
+	//printf("\nFile Open %s", hold->fname);
+
 	timerfd_settime(timer, 0, &itval, NULL);
 
 	uint64_t numPeriods=0;
@@ -127,15 +131,16 @@ void MultiThreads(void *ptr){
 		//fscanf(fptr, "%s", holdline);
 		fgets(holdline, 100,fptr);
 		read(timer, &numPeriods, sizeof(numPeriods));
-	
-		fclose(fptr);
-	printf("HelloThere3\n");
+//		printf("Loop is Running: %s\n", hold->fname);
+
 		if(numPeriods>1)
 		{
-			printf("\n-----Missed-----");
+			printf("\n-----Missed-----\n");
 			exit(1);
 		}
 	}
+	//printf("\nOut of While loop: %s\n", hold->fname);//here
+	fclose(fptr);
 	pthread_exit(0);
 }
 
@@ -156,8 +161,6 @@ int main(void)
 	pthread_create(&thread1, NULL,(void *)&MultiThreads, (void *)&vfirst);
 	pthread_create(&thread2, NULL,(void *)&MultiThreads, (void *)&vsecond);
 	pthread_create(&thread3, NULL,(void *)&Sumthread, (void *)&vthird);
-
-	printf("Half way there\n");
 
 	pthread_join(thread1,NULL);
 	pthread_join(thread2,NULL);
