@@ -127,11 +127,14 @@ void MultiThreads(void *ptr){
 
 	while(!feof(fptr))
 	{
-		//finish fscanf
-		//fscanf(fptr, "%s", holdline);
+		//fgets works!
 		fgets(holdline, 100,fptr);
+
+		//printf("\n%s", holdline); This was a check making sure fgets works
+
 		read(timer, &numPeriods, sizeof(numPeriods));
-//		printf("Loop is Running: %s\n", hold->fname);
+
+		//printf("Loop is Running: %s\n", hold->fname);
 
 		if(numPeriods>1)
 		{
@@ -169,7 +172,7 @@ int main(void)
 	for(x=0;x<20;x++)
 	{
 		printf("Line %d: %s\n", x,vthird.lyrics[x]);
-		x++;
+
 	}
 
 	printf("Done\n");
