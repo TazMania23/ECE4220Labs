@@ -4,7 +4,7 @@ For lab Report (other ways to test for stuff)
 Only one light can be on at a time
 Green-Light1 Yellow-Light2 Red-ped                                                                                                                                     
 
-1st way is Polled Scheduling
+1st way is Polled Scheduling- 1 thread
 -set up a queue and go in order loop and see if tasks needs to be done
 -check_button to see if ped is there. 1 if person is there 0 if no one is there
 -after time frame call clear button which will set it to 0;
