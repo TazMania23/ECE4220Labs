@@ -60,7 +60,7 @@ void Mainthread(void* ptr)
 			digitalWrite(LEDR, HIGH);
 			clear_button();
 
-			sleep(2);
+			sleep(1);
 			digitalWrite(LEDR,LOW);
 		}
 	}
