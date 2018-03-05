@@ -25,7 +25,8 @@ Posix semaphore (this word sounds weird) www.csc.villanova.edu/-madmin/threads/p
 try without then try with
 priotities in command line argument
 play with both policys
-sudo ./Lab3_Week2 Prior1 Policy1 Prior2 Policy2 Prior3 Policy3
+sudo ./Lab3_Week2 Prior1 Prior2 Prior3 
+sudo ./Lab3_Week2 Prior1 Policy1 Prior2 Policy2 Prior3 Policy3 <- only if want to do extra
 Priorities bw 1 and 99
 Policy->FIFO=1 RoundRobin(RR)=2
 
