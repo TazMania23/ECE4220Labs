@@ -41,7 +41,7 @@ void Mainthread(void* ptr)
 
 	int *hold= (int*) ptr;
 
-	printf("Starting Loop of Lights, Push rightmost button to end\n");
+	printf("Starting Loop of Lights, Push right most button to end\n");
 
 	while(digitalRead(PBUTTON2)==FALSE)
 	{
