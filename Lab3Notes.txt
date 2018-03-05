@@ -8,7 +8,9 @@ Green-Light1 Yellow-Light2 Red-ped
 -set up a queue and go in order loop and see if tasks needs to be done
 -check_button to see if ped is there. 1 if person is there 0 if no one is there
 -after time frame call clear button which will set it to 0;
-sudo insmod ece4220lab3.ko
+sudo insmod ece4220lab3.ko--this is done
+workspace/Lab3Week1/src
+To Compile: gcc -g -lwiringPi -lpthread Lab3Week1.c libece4220lab3.a
 sudo ./a.out
 For mine to specifically run
 
@@ -31,8 +33,9 @@ Priorities bw 1 and 99
 Policy->FIFO=1 RoundRobin(RR)=2
 
 to run
-sudo insmod ece4220lab3.ko
-sudo ./Lab3_Week1
+sudo insmod ece4220lab3.ko--already done
+To Compile: gcc -g -lwiringPi -lpthread Lab3Week2.c libece4220lab3.a
+sudo ./a.out # # #
 
 
 Both
