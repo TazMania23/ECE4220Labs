@@ -59,7 +59,7 @@ void Mainthread(void* ptr)
 		{
 			digitalWrite(LEDR, HIGH);
 			clear_button();
-
+			//sleep was 2 just to test
 			sleep(1);
 			digitalWrite(LEDR,LOW);
 		}
