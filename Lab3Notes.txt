@@ -9,7 +9,8 @@ Green-Light1 Yellow-Light2 Red-ped
 -check_button to see if ped is there. 1 if person is there 0 if no one is there
 -after time frame call clear button which will set it to 0;
 sudo insmod ece4220lab3.ko
-sudo ./Lab3_Week1
+sudo ./a.out
+For mine to specifically run
 
 
 2nd way Priority Scheduling 
