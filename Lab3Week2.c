@@ -45,7 +45,7 @@ void greenLight(void *ptr)
 
 		pthread_mutex_lock(&lock);//locks
 
-		printf("\nGreen Light"); //check
+
 		//turn everything off first
 		digitalWrite(LEDR,LOW);
 		digitalWrite(LEDY,LOW);
@@ -53,6 +53,7 @@ void greenLight(void *ptr)
 		digitalWrite(LEDB,LOW);
 		//then turn on Green light. This should happen quickly
 		digitalWrite(LEDG,HIGH);
+		printf("\nGreen Light"); //check
 
 		sleep(1);
 
@@ -76,7 +77,7 @@ void yellowLight(void *ptr)
 
 			pthread_mutex_lock(&lock);//locks
 
-			printf("\nYellow Light"); //check
+
 			//turn everything off first
 			digitalWrite(LEDR,LOW);
 			digitalWrite(LEDY,LOW);
@@ -84,6 +85,7 @@ void yellowLight(void *ptr)
 			digitalWrite(LEDB,LOW);
 			//then turn on Yellow light. This should happen quickly
 			digitalWrite(LEDY,HIGH);
+			printf("\nYellow Light"); //check
 
 			sleep(1);
 
@@ -107,19 +109,22 @@ void redLight(void *ptr)
 
 			pthread_mutex_lock(&lock);//locks
 
-			printf("\nRed Light"); //check
+
 			//turn everything off first
 			digitalWrite(LEDR,LOW);
 			digitalWrite(LEDY,LOW);
 			digitalWrite(LEDG,LOW);
 			digitalWrite(LEDB,LOW);
 			//then turn on Red light. This should happen quickly
-			digitalWrite(LEDR,HIGH);
+			if(check_button()==1)
+			{
+				printf("\nRed Light"); //check
+				digitalWrite(LEDR,HIGH);
 
-			clear_button();
+				clear_button();
 
-			sleep(1);
-
+				sleep(1);
+			}
 			pthread_mutex_unlock(&lock);
 
 			usleep(1000);
