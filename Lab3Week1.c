@@ -46,21 +46,25 @@ void Mainthread(void* ptr)
 	while(digitalRead(PBUTTON2)==FALSE)
 	{
 		//Green
+		//printf("\nGreen");
 		digitalWrite(LEDG,HIGH);
 		sleep(1);
 		digitalWrite(LEDG,LOW);
 
 		//Yellow
+		//printf("\nYellow");
 		digitalWrite(LEDY,HIGH);
 		sleep(1);
 		digitalWrite(LEDY,LOW);
 
 		if(check_button()==1)
 		{
+			//printf("\nRedLED ON");
 			digitalWrite(LEDR, HIGH);
 			clear_button();
 			//sleep was 2 just to test
 			sleep(1);
+			//printf("\nRedLED OFF");
 			digitalWrite(LEDR,LOW);
 		}
 	}
