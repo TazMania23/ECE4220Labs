@@ -1,0 +1,31 @@
+Common Buffer
+->GPS data from N_pipe1 P1
+->Time_GPS P1 250ms
+->Time from Button pressed P2
+->GPS Data/Location (we must calculate that, its unknown)P2
+
+Week 1 (Part1&Part2)
+Get libraries and etc from Lab 3
+Main must open its side of the pipe before you can recieve any data
+-just get them talking- print the talk as check
+-Time stamp before and after GPS 0-255. A time at what you recieved the data- print to 
+-struct buffer or a global buffer- buffer accepts GPS values and time stamp corrosponding
+-pthread0 has access to the buffer and print from the thread- print from thread is check
+-gps writes only until the pipe opens up 
+Week 2
+-checks every 75ms lab 2
+-check button lab 3 
+-when the button is pressed, it will send the timestamp to pthread 0
+-dynamic threads -_- 
+-two seperate programs for the different processes 
+3 terminals
+
+lab3.ko checks for the change from low to high (1 and 2)
+sudo rmmod ece4220lab3
+lab4.ko checks for a constant hold, high then hold (3 & 4)
+
+To make GPS_Device executable (to give it permission) chmod +x GPS_device
+To remove executable permission chmod -x Lab4*.c
+gcc -g Lab4_Main.c -o Lab4_Main -lpthread -lwiring  libece4220lab3.a
+gcc -g Lab4_Button
+lab 2 end of slides gettimeofday()
