@@ -1,2 +1,15 @@
 Examples of Server and Client
 https://www.geeksforgeeks.org/socket-programming-cc/
+
+Cast to sockaddr_in() in slides
+not the plain one
+Focus on family, sin_port, and sin_address
+
+htons hotnl to convert port number
+
+in_addr inet_adder(char addr) convets to long
+
+sendto() recvfrom() to actually use pipes
+sendto() must define everything, recvfrom () just place your struct and it will automatically fill
+
+IP 125.206.19.255 to send to all PI's
