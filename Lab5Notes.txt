@@ -22,3 +22,4 @@ IP 125.206.19.255 to send to all PI's
   Recieve data fom socket (waiting funtcion)
   Compare data recieved to the strings expected 
   Determine which cas to run (WHOIS,VOTE,CHECK VOTE RECIEVED)
+arguments ./a.out port
