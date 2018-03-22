@@ -30,3 +30,5 @@ To remove executable permission chmod -x Lab4*.c
 gcc -g Lab4_Main.c -o Lab4_Main -lpthread -lwiringPi  libece4220lab3.a
 gcc -g Lab4_Button
 lab 2 end of slides gettimeofday()
+
+Delete Pipe sudo rm pipename
