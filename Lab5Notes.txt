@@ -13,3 +13,12 @@ sendto() recvfrom() to actually use pipes
 sendto() must define everything, recvfrom () just place your struct and it will automatically fill
 
 IP 125.206.19.255 to send to all PI's
+
+1)Create socket connection-less
+2)Setup Server properties
+3)Bind the socket to the address of the hoset and the port number
+4)Set socket to broadcast
+5)Loop
+  Recieve data fom socket (waiting funtcion)
+  Compare data recieved to the strings expected 
+  Determine which cas to run (WHOIS,VOTE,CHECK VOTE RECIEVED)
