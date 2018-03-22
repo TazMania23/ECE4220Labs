@@ -26,6 +26,6 @@ lab4.ko checks for a constant hold, high then hold (3 & 4)
 
 To make GPS_Device executable (to give it permission) chmod +x GPS_device
 To remove executable permission chmod -x Lab4*.c
-gcc -g Lab4_Main.c -o Lab4_Main -lpthread -lwiring  libece4220lab3.a
+gcc -g Lab4_Main.c -o Lab4_Main -lpthread -lwiringPi  libece4220lab3.a
 gcc -g Lab4_Button
 lab 2 end of slides gettimeofday()
