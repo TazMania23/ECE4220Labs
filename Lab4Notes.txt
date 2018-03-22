@@ -20,6 +20,7 @@ Week 2
 -two seperate programs for the different processes 
 3 terminals
 
+sudo insmod ece4220lab3.ko
 lab3.ko checks for the change from low to high (1 and 2)
 sudo rmmod ece4220lab3
 lab4.ko checks for a constant hold, high then hold (3 & 4)
