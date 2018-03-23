@@ -26,49 +26,51 @@
 #define SCHED_POLICY SCHED_FIFO
 
 int main(void) {
+	//setting the button its just 27. added at last second
+	wiringPiSetup();
+	pinMode(27, INPUT);
+	pullUpDnControl(27, PUD_DOWN);
+
 	//PB is sending true or false
 	bool PB;
-	int x = 0;
+	//int x = 0;
 	//create pipe
 	//send 1 if button is pushed else 0
 	int pipe_two;
 	system("mkfifo N_pipe2");
+
 	//setting timer & period
 	struct itimerspec itval;
-	int timer=timerfd_create(CLOCK_MONOTONIC,0);
-	//period 75ms
-	itval.it_interval.tv_sec=0;
-	itval.it_interval.tv_nsec=75000000;
-	//timer nsec to delay it a tiny bit
-	itval.it_value.tv_sec=0;
-	itval.it_value.tv_nsec=1000;
+	int timer = timerfd_create(CLOCK_MONOTONIC, 0);
 
+	//period 75ms
+	itval.it_interval.tv_sec = 0;
+	itval.it_interval.tv_nsec = 75000000;
+
+	//timer nsec to delay it a tiny bit
+	itval.it_value.tv_sec = 0;
+	itval.it_value.tv_nsec = 1000;
 
 	timerfd_settime(timer, 0, &itval, NULL);
-	uint64_t numPeriods=0;
-
+	uint64_t numPeriods = 0;
 
 	//opens pipe and check
-	if ((pipe_two = open("N_pipe2", O_WRONLY)) < 0)
-	{
+	if ((pipe_two = open("N_pipe2", O_WRONLY)) < 0) {
 		printf("\nN_pipe2 couldn't be opened Process\n");
 		return EXIT_FAILURE;
 	}
 
 	//while loop is set to 20 temporarily for it to work
-	while (x < 20)
-	{
-		if (check_button() == 1)
-		{
-			PB=TRUE;
-			if (write(pipe_two, &PB, sizeof(PB)) != sizeof(PB))
-			{
+	while (1) {
+		if (check_button() == 1) {
+			PB = TRUE;
+			if (write(pipe_two, &PB, sizeof(PB)) != sizeof(PB)) {
 				printf("\nN_pipe2 write error Process\n");
 				return EXIT_FAILURE;
 			}
 
 			clear_button();
-			x++;
+
 			//sleep(1); to allow rapid fire
 
 		}
