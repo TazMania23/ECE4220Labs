@@ -22,6 +22,8 @@
 #include <pthread.h>
 
 #include "ece4220lab3.h"
+//said it couldnt find it?
+void Kidthreads(void *ptr);
 
 #define SCHED_POLICY SCHED_FIFO
 //for gps numbers
@@ -51,8 +53,7 @@ typedef struct{
 	unsigned int nowTn;
 	//pipe number for extra credt
 	int numPipe;
-}location;
-
+}gps_m;
 
 //add printing struct for extra credit
 
@@ -61,7 +62,9 @@ struct timespec startingT;
 
 void Parthread(void *ptr)
 {
+	//this is recieving buffer
 	gps *info= (gps *) ptr;
+	//child thread
 	pthread_t childT;
 
 	//timers for start and timeP2 is recieved. Will get rid of startT
@@ -69,7 +72,7 @@ void Parthread(void *ptr)
 	//pipe2 id
 	int pipe_two;
 	//my while loop while it's not infinity
-	int x=0;
+	//int x=0;
 	//pipe2 is sending a Boolean
 	bool PB=0;
 	//pipe2 open
@@ -79,8 +82,9 @@ void Parthread(void *ptr)
 		}
 	//getting starting time for this thread
 	clock_gettime(CLOCK_MONOTONIC, &startT);
-	while(x<20)
+	while(1)
 	{
+		printf("\nYeah.... Push the button- ChrisTucker\n");
 		if(read(pipe_two,&PB, sizeof(PB))<0)
 		{
 			printf("\nN_pipe2 read error Main\n");
@@ -89,17 +93,54 @@ void Parthread(void *ptr)
 			clock_gettime(CLOCK_MONOTONIC, &timeP2);
 
 			//printing PushButton times just as a check before
-			printf("\nPushbutton Time-Stamp: Seconds: %u NanoSeconds: %u", (timeP2.tv_sec-startT.tv_sec),(timeP2.tv_nsec-startT.tv_nsec));
+			printf("\nPushbutton Time-Stamp from Pipe2 being opened to read: Seconds: %u NanoSeconds: %u", (timeP2.tv_sec-startT.tv_sec),(timeP2.tv_nsec-startT.tv_nsec));
 
 			//creating child thread
 			pthread_create(&childT, NULL, (void*)Kidthreads,(void *)info);
-			x++;
+
 	}
 }
 
 void Kidthreads(void *ptr)
 {
+	//variables
+	gps *info= (gps *) ptr;
+	struct timespec timeK;
 
+	//hold time math stuff
+	float currentT, beforeT, afterT, beforeLoc, afterLoc;
+	float crossRef;
+
+	//passing data to location data struct variable
+	gps_m Data;
+	Data.prevLoc= info->loc;
+	Data.prevTs= info->time_stampS;
+	Data.prevTn= info->time_stampN;
+
+	//getting now time, NOT SURE IF ITS SUPPOSE TO BE REAL, MIGHT NOT MATTER
+	clock_gettime(CLOCK_MONOTONIC, &timeK);
+	Data.nowTs= (unsigned int)timeK.tv_sec;
+	Data.nowTn=	(unsigned int)timeK.tv_nsec;
+
+	//code was freaking out so I added a delay
+	while(Data.prevTs==info->time_stampS && Data.prevTn==info->time_stampN)
+		usleep(20);
+
+
+	Data.afterLoc= info->loc;
+	Data.afterTs=info->time_stampS;
+	Data.afterTn=info->time_stampN;
+
+	currentT=(Data.nowTs*1000) + (Data.nowTn/1000000);
+	beforeT= (Data.prevTs*1000) + (Data.prevTn/1000000);
+	afterT= (Data.afterTs*1000) + (Data.afterTn/1000000);
+	beforeLoc= Data.prevLoc;
+	afterLoc= Data.afterLoc;
+
+	crossRef= (float)(beforeLoc +(currentT-beforeT)*(afterLoc-beforeLoc)/(afterT-beforeT));
+	printf("Location is %f at Time: %f", crossRef, currentT);
+
+	pthread_exit(0);
 }
 
 int main(void) {
@@ -109,10 +150,11 @@ int main(void) {
 	int timer=timerfd_create(CLOCK_MONOTONIC, 0);
 	//unsigned int time;
 	struct timespec endingT;
+	gps Buffer;
 
+	pthread_t pthread0;
 
-
-	int x=0;
+	//int x=0;
 	unsigned char buf= 0;
 
 	int pipe_one;
@@ -134,36 +176,38 @@ int main(void) {
 	}
 
 
+	//create thread
+	pthread_create(&pthread0, NULL, (void*)Parthread, (void *)&Buffer);
 
 
 	//getting starting time stamp. can't put in while loop since it would keep updating
-	clock_gettime(CLOCK_MONOTONIC, &startingT);
+
 
 	//made this integer x loop a certain amount of times so I wouldn't have to Ctrl+C it to exit
-	while(x<20)
+	while(1)
 	{
 		//this slows the loop
 		usleep(250000);
-
+		clock_gettime(CLOCK_MONOTONIC, &startingT);
 		if(read(pipe_one,&buf, sizeof(buf))<0)
 		{
 			printf("\nN_pipe1 read error Main\n");
 			return EXIT_FAILURE;
 		}
+		else
+			Buffer.loc=buf;
+
 		//getting the ending time stamp Pipe1
 		clock_gettime(CLOCK_MONOTONIC, &endingT);
 
 		//printing GPS Times ending-starting times
 		printf("\nGPS Location: %u  GPS Time-Stamp, Seconds: %u NanoSeconds: %u", buf,(endingT.tv_sec-startingT.tv_sec),(endingT.tv_nsec-startingT.tv_nsec));
+		Buffer.time_stampS=endingT.tv_sec-startingT.tv_sec;
+		Buffer.time_stampN=endingT.tv_nsec-startingT.tv_nsec;
 
-
-		x++;
 	}
 
 	printf("\n");
-	//close pipes
-	close(pipe_one);
-
 	//this was deletes the pipe to restart timer, not needed
 	//system("rm /tmp/N_pipe1");
 	return EXIT_SUCCESS;
