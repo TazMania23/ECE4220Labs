@@ -54,8 +54,11 @@ int main(void) {
 	timerfd_settime(timer, 0, &itval, NULL);
 	uint64_t numPeriods = 0;
 
+	printf("\nProcess times set up\n");
+
+
 	//opens pipe and check
-	if ((pipe_two = open("N_pipe2", O_WRONLY)) < 0) {
+	if ((pipe_two = open("N_pipe2", O_RDWR)) < 0) {
 		printf("\nN_pipe2 couldn't be opened Process\n");
 		return EXIT_FAILURE;
 	}
