@@ -26,19 +26,33 @@
 #define SCHED_POLICY SCHED_FIFO
 //for gps numbers
 typedef struct{
+	//location
 	int loc;
-	unsigned int time_stamp;
+	//locations with corrosponding time stamp
+	unsigned int time_stampS;
+	unsigned int time_stampN;
+	//pipe for extra credit
 	int numPipe;
 }gps;
 //for process2 data
 typedef struct{
+	//previous location
 	int prevLoc;
-	unsigned int prevT;
+	//previous times broken into secs and nsecs
+	unsigned int prevTs;
+	unsigned int prevTn;
+	//after location
 	int afterLoc;
-	unsigned int afterT;
-	unsigned int nowT;
+	//after times into secs and nsecs
+	unsigned int afterTs;
+	unsigned int afterTn;
+	//current times secs and nsecs
+	unsigned int nowTs;
+	unsigned int nowTn;
+	//pipe number for extra credt
 	int numPipe;
 }location;
+
 
 //add printing struct for extra credit
 
