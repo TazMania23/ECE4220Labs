@@ -93,12 +93,13 @@ void Parthread(void *ptr)
 			printf("\nN_pipe2 couldn't be opened Main\n");
 		}
 
-
+	printf("\nPipe2 opened");
 	int SimPipe[2];
 	if(pipe(SimPipe)<0)
 		printf("\nCreating Pipe in Function: Parthread failed");
 
 	info->numPipe=SimPipe[1];
+	printf("\nCreating Pthread1 next\n");
 	pthread_create(&pthread1, NULL, (void *)print, (void *) &SimPipe[0]);
 
 
@@ -109,7 +110,6 @@ void Parthread(void *ptr)
 	//clock_gettime(CLOCK_MONOTONIC, &startT);
 	while(1)
 	{
-		printf("\nYeah.... Push the button- ChrisTucker\n");
 		if(read(pipe_two,&PB, sizeof(PB))<0)
 		{
 			printf("\nN_pipe2 read error Main\n");
@@ -133,7 +133,7 @@ void Kidthreads(void *ptr)
 	struct timespec timeK;
 
 	//hold time math stuff
-	float currentT, beforeT, afterT, beforeLoc, afterLoc;
+	double currentT, beforeT, afterT, beforeLoc, afterLoc;
 	float crossRef;
 
 	//passing data to location data struct variable
@@ -144,33 +144,36 @@ void Kidthreads(void *ptr)
 
 	//getting now time, NOT SURE IF ITS SUPPOSE TO BE REAL, MIGHT NOT MATTER
 	clock_gettime(CLOCK_MONOTONIC, &timeK);
-	Data.nowTs= (unsigned int)timeK.tv_sec;
-	Data.nowTn=	(unsigned int)timeK.tv_nsec;
+	Data.nowTs= timeK.tv_sec- startingT.tv_sec;
+	Data.nowTn= timeK.tv_nsec- startingT.tv_nsec;
 
 	//code was freaking out so I added a delay
 	while(Data.prevTs==info->time_stampS && Data.prevTn==info->time_stampN)
+	{
 		usleep(20);
+	}
 
 
 	Data.afterLoc= info->loc;
 	Data.afterTs=info->time_stampS;
 	Data.afterTn=info->time_stampN;
 
-	currentT=(Data.nowTs*1000) + (Data.nowTn/1000000);
-	beforeT= (Data.prevTs*1000) + (Data.prevTn/1000000);
-	afterT= (Data.afterTs*1000) + (Data.afterTn/1000000);
+	currentT= ((double)Data.nowTs) +   ((double)Data.nowTn/1000000000);
+	beforeT= ((double)Data.prevTs) +  ((double)Data.prevTn/1000000000);
+	afterT= ((double)Data.afterTs) + ((double)Data.afterTn/1000000000);
 	beforeLoc= Data.prevLoc;
 	afterLoc= Data.afterLoc;
 
-	crossRef= (float)(beforeLoc +(currentT-beforeT)*(afterLoc-beforeLoc)/(afterT-beforeT));
-	printf("\nKidThread Printf -> Location is %f at Time: %f", crossRef, currentT);
+	crossRef= (float)(beforeLoc +((float)currentT-(float)beforeT)*(afterLoc-beforeLoc)/((float)afterT-(float)beforeT));
+	
+	printf("\n\nKidThread Printf -> Location is %f at Time: %lf\n", crossRef, currentT);
 
 	//printing
 	printer p1;
 	p1.finLoc=crossRef;
 	p1.finTime=currentT;
 
-	write(info->numPipe, &p1, sizeof(gps));
+	write(info->numPipe, &p1, sizeof(printer));
 
 	pthread_exit(0);
 }
@@ -183,9 +186,8 @@ void print(void *ptr)
 
 	while(1)
 	{
-		printf("\n--------Loading Print--------");
-		read(simPipe, &printInfo, sizeof(gps));
-		printf("Location: %f  \t Seconds: %u  NanoSeconds: %u", printInfo.finLoc,printInfo.finTime);
+		read(simPipe, &printInfo, sizeof(printer));
+	//	printf("Location: %f  \t Seconds: %u  NanoSeconds: %u", printInfo.finLoc,printInfo.finTime);
 	}
 }
 
@@ -213,7 +215,7 @@ int main(void) {
 	//doesn't need sudo since to start the program I use sudo ./Lab4_Main
 	//by association since this comes after it doesn't need sudo just &
 
-	sleep(1);
+	
 	//pipe1 open
 	if((pipe_one =open("/tmp/N_pipe1", O_RDONLY))<0)
 	{
@@ -225,29 +227,31 @@ int main(void) {
 	//create thread
 	pthread_create(&pthread0, NULL, (void*)Parthread, (void *)&Buffer);
 
-
+	sleep(1);
 	//getting starting time stamp. can't put in while loop since it would keep updating
-
-		clock_gettime(CLOCK_MONOTONIC, &startingT);
+	printf("\nPipe is open");
+	clock_gettime(CLOCK_MONOTONIC, &startingT);
 	//made this integer x loop a certain amount of times so I wouldn't have to Ctrl+C it to exit
 	while(1)
 	{
-		//this slows the loop
-		usleep(250000);
+		
+		usleep(250000);		
 
 		if(read(pipe_one,&buf, sizeof(buf))<0)
 		{
 			printf("\nN_pipe1 read error Main\n");
 			return EXIT_FAILURE;
 		}
-		else
+		else 
+		{
 			Buffer.loc=buf;
+		}
 
 		//getting the ending time stamp Pipe1
 		clock_gettime(CLOCK_MONOTONIC, &endingT);
 
 		//printing GPS Times ending-starting times
-		printf("\nGPS Location: %u  GPS Time-Stamp, Seconds: %u NanoSeconds: %u", buf,(endingT.tv_sec-startingT.tv_sec),(endingT.tv_nsec-startingT.tv_nsec));
+		printf("\nGPS Location: %u  GPS Time-Stamp, Seconds: %u NanoSeconds: %d", buf,(endingT.tv_sec-startingT.tv_sec),(endingT.tv_nsec-startingT.tv_nsec));
 		Buffer.time_stampS=endingT.tv_sec-startingT.tv_sec;
 		Buffer.time_stampN=endingT.tv_nsec-startingT.tv_nsec;
 
