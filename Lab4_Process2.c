@@ -38,22 +38,30 @@ int main(void) {
 	//send 1 if button is pushed else 0
 	int pipe_two;
 	system("mkfifo N_pipe2");
-
+	fflush(stdout);
 	//setting timer & period
 	struct itimerspec itval;
+	struct sched_param param;
+	
 	int timer = timerfd_create(CLOCK_MONOTONIC, 0);
+
+	printf("\ntimer created");	
+
+
+	param.sched_priority=55;
+	sched_setscheduler(0,55,&param);
+
 
 	//period 75ms
 	itval.it_interval.tv_sec = 0;
 	itval.it_interval.tv_nsec = 75000000;
-
 	//timer nsec to delay it a tiny bit
 	itval.it_value.tv_sec = 0;
 	itval.it_value.tv_nsec = 1000;
 
 	timerfd_settime(timer, 0, &itval, NULL);
 	uint64_t numPeriods = 0;
-
+	
 	printf("\nProcess times set up\n");
 
 
@@ -62,23 +70,26 @@ int main(void) {
 		printf("\nN_pipe2 couldn't be opened Process\n");
 		return EXIT_FAILURE;
 	}
+	
+	printf("\nPipe2 Didn't Fail");
 
 	//while loop is set to 20 temporarily for it to work
 	while (1) {
 		if (check_button() == 1) {
 			PB = TRUE;
-			if (write(pipe_two, &PB, sizeof(PB)) != sizeof(PB)) {
+			if(write(pipe_two, &PB, sizeof(PB)) != sizeof(PB))
+			 {
 				printf("\nN_pipe2 write error Process\n");
 				return EXIT_FAILURE;
 			}
-
+			
 			clear_button();
-
+			printf("\nChecking Pushbutton");
 			//sleep(1); to allow rapid fire
 
 		}
 		read(timer, &numPeriods, sizeof(numPeriods));
-
+	//	printf("\nread is done");
 	}
 
 	return EXIT_SUCCESS;
