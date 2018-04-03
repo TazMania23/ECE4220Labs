@@ -6,7 +6,7 @@
  Copyright   : Your copyright notice: it's mine, Taz
  Description : Hello World in C, Ansi-style
  ============================================================================
- 
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
