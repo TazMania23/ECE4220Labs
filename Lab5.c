@@ -42,7 +42,7 @@ int main(argc, *argv[]) {
 	//check for right conditions
 	if (argc!=2)
 	{
-		printf("\n Wrong amount of Arguments\n");
+		printf("\n Wrong amount of Arguments. Expecting ./FileName PortNumber\n");
 		return 0;
 	}
 
