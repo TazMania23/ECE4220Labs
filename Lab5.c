@@ -127,6 +127,26 @@ int randomNum;
 			//Invalid Response or # symbol
 			case 0:
 				
+				unsigned int returnNum;
+				unsigned int returnIP;
+				unsigned int returnedAddr;
+				
+				if(Buffer[0]=='#')
+				{
+					sscanf(My_IP, "# %*u.%*u.%*u.%u %u",&returnedAddr);
+					sscanf(Buffer, "# %*u.%*u.%*u.%u %u", &returnIP, returnNum);
+					printf("\nRecieved Vote With => IP: %u\tNUM: %u\n", returnIP,returnNum);
+					//to determine if I'm the champ
+					if(returnNum<randomNum)//if my num is greater
+						Champ= 1;	
+					if(returnNum==randomNum)
+						if(returnIP>returnAddr)//compares the random generated numbers if equal
+							Champ=0;
+						else
+							Champ=1;
+				}
+				else
+				printf("\nInvalid Response, Case 0)";
 				
 				break;
 			//WHOIS
@@ -168,15 +188,6 @@ int randomNum;
 			
 
 		}		
-
-
-
-
-
-
-
-
-
 
 
 	}
