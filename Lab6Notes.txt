@@ -1,0 +1,8 @@
+Week 1 (Lab2)
+Create a module that has a speaker function (square wave)
+
+(Don't need the first parth of int kthread_fn: from printk("In kthread")... to schedule();. its just another way to wait
+while(1){msleep()...}
+
+kthread should stop vs kthread stop
+create, wake up process, kthread stop, kthread should stop
