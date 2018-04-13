@@ -23,3 +23,5 @@ IP 125.206.19.255 to send to all PI's
   Compare data recieved to the strings expected 
   Determine which cas to run (WHOIS,VOTE,CHECK VOTE RECIEVED)
 arguments ./a.out port
+
+sudo shutdown --poweroff 0
