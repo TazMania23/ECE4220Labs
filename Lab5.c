@@ -25,8 +25,8 @@
 //method to check the msg received from the client
 int messageCheck(const char *msg)
 {
-	const char *mes1= 'WHOIS';
-	const char *mes2= 'VOTE';
+	const char *mes1= "WHOIS";
+	const char *mes2= "VOTE";
    if(strcmp(msg,mes1)==0)
 	   return 1;
    else if(strcmp(msg,mes2)==0)
@@ -35,10 +35,11 @@ int messageCheck(const char *msg)
 	   return 0;
 }
 
-int main(argc, *argv[]) {
+
+int main(int argc, char *argv[]) {
 	
 	srand(time(NULL));
-
+	printf("\nStarting\n");
 	//check for right conditions
 	if (argc!=2)
 	{
@@ -48,17 +49,17 @@ int main(argc, *argv[]) {
 
 	//Some Variables
 	int PORT= atoi(argv[1]);
-	char My_Message[MSG_SIZE]= "Taz is the master, 128.206.19.15";
+	char My_Message[MSG_SIZE]= "Taz on 128.206.19.15 is the master";
 	char My_IP[]="128.206.19.15";
 	char BCast[]="128.206.19.255";
 
 	struct sockaddr_in server_addr, cli_addr;	
-	int length;
+	int length=0;
 	socklen_t Len= sizeof(struct sockaddr_in);
 	int messCheck;
 	int bindCheck;
 	char Buffer[MSG_SIZE];
-	
+
 
 	//Creating Socket & Check
 	int sockfd= socket(AF_INET, SOCK_DGRAM, 0);
@@ -69,9 +70,11 @@ int main(argc, *argv[]) {
 	}
 	
 	
-	
+//	printf("\nAfter Creating Socket\n");
+
 	//Setting port and getting Length
 	bzero(&server_addr, length);
+//	printf("\nAfter bzero under Setting Port\n");
 
 	server_addr.sin_family= AF_INET;
 	server_addr.sin_port=htons(PORT);
@@ -87,11 +90,11 @@ int main(argc, *argv[]) {
                 return 0;
         }
 
-	
+//	printf("\nAfter Binding Socket\n");
 	//BroadCast setup
 	cli_addr.sin_addr.s_addr=inet_addr(BCast);
 	cli_addr.sin_port= htons(PORT);
-	
+//	printf("\nBroadCast\n");
 	//Checking Set sock
 	int val=1;
 	if(setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &val, sizeof(val))<0)
@@ -99,11 +102,15 @@ int main(argc, *argv[]) {
 		printf("\nBroadCast Setup Error");
 		return 0;
 	}	
+//printf("\nBefore While Loop\n");
 
 //--------------------------------------------------------------------------
 //While Loop
 int Champ=0;
 int randomNum;
+unsigned int rNum;
+unsigned int rIP;
+unsigned int rAddr;
 
 	while(1)
 	{
@@ -127,26 +134,23 @@ int randomNum;
 			//Invalid Response or # symbol
 			case 0:
 				
-				unsigned int returnNum;
-				unsigned int returnIP;
-				unsigned int returnedAddr;
 				
 				if(Buffer[0]=='#')
 				{
-					sscanf(My_IP, "# %*u.%*u.%*u.%u %u",&returnedAddr);
-					sscanf(Buffer, "# %*u.%*u.%*u.%u %u", &returnIP, returnNum);
-					printf("\nRecieved Vote With => IP: %u\tNUM: %u\n", returnIP,returnNum);
+					printf("\n0\n");
+					sscanf(My_IP, "# %*u.%*u.%*u.%u %*u",&rAddr);
+					printf("\n1000000\n");
+					sscanf(Buffer, "# %*u.%*u.%*u.%u %u", &rIP, &rNum);
+					printf("\nRecieved Vote With => IP: %u\tNUM: %u\n", rIP,rNum);
 					//to determine if I'm the champ
-					if(returnNum<randomNum)//if my num is greater
-						Champ= 1;	
-					if(returnNum==randomNum)
-						if(returnIP>returnAddr)//compares the random generated numbers if equal
+					if(rNum<randomNum)//if my num is greater
+						Champ= 1;
+					else if(rNum==randomNum)
+						if(rIP>rAddr)//compares the random generated numbers if equal
 							Champ=0;
 						else
 							Champ=1;
 				}
-				else
-				printf("\nInvalid Response, Case 0)";
 				
 				break;
 			//WHOIS
@@ -164,22 +168,24 @@ int randomNum;
 				break;
 			//VOTE, recieves if I am master or not (change champ accordingly 
 			case 2:
+				
 				//Generate Random NUM
 				randomNum= rand()%10+1;
 				//Check for feedback?
 				char feedback[MSG_SIZE];
 				
-				sprintf(feedback, "#%s %d",My_IP,randomNum); 
+				sprintf(feedback, "# %s %d",My_IP,randomNum); 
+				
 				
 				cli_addr.sin_addr.s_addr=inet_addr(BCast);
-				n=sendto(sockfd, feedback, MSG_SIZE, 0, (const struct sockaddr *)&cli_addr, Len);
+				n=sendto(sockfd, feedback, MSG_SIZE, 0, (struct sockaddr *)&cli_addr, Len);
 				//FeedBack Check
 				if(n<0)
 				{
 					printf("\nError FeedBack Check (case 2)");
 					return 0;
 				}
-
+				
 				recvfrom(sockfd, Buffer, MSG_SIZE, 0, (struct sockaddr *)&cli_addr, &Len);
 				printf("\nRecieved Message(In Switch): %s\n", Buffer);
 				Champ=1;
@@ -187,7 +193,7 @@ int randomNum;
 				break;
 			
 
-		}		
+		;}		
 
 
 	}
