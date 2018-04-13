@@ -25,14 +25,16 @@
 //method to check the msg received from the client
 int messageCheck(const char *msg)
 {
-	const char *mes1= "WHOIS";
-	const char *mes2= "VOTE";
-   if(strcmp(msg,mes1)==0)
+	//new lines were needed to make it work
+	const char *mes1= "WHOIS\n";
+	const char *mes2= "VOTE\n";
+  if(strcmp(msg,mes1)==0)
 	   return 1;
    else if(strcmp(msg,mes2)==0)
 	   return 2;
    else
 	   return 0;
+
 }
 
 
@@ -137,9 +139,9 @@ unsigned int rAddr;
 				
 				if(Buffer[0]=='#')
 				{
-					printf("\n0\n");
+					//printf("\n0\n");
 					sscanf(My_IP, "# %*u.%*u.%*u.%u %*u",&rAddr);
-					printf("\n1000000\n");
+					//printf("\n1000000\n");
 					sscanf(Buffer, "# %*u.%*u.%*u.%u %u", &rIP, &rNum);
 					printf("\nRecieved Vote With => IP: %u\tNUM: %u\n", rIP,rNum);
 					//to determine if I'm the champ
@@ -162,7 +164,6 @@ unsigned int rAddr;
 					char mast[MSG_SIZE];
 					sprintf(mast, "%s",My_Message);
 				
-					cli_addr.sin_addr.s_addr= inet_addr(BCast);
 					sendto(sockfd, mast, MSG_SIZE, 0, (const struct sockaddr *)&cli_addr, Len);
 				}
 				break;
@@ -179,6 +180,7 @@ unsigned int rAddr;
 				
 				cli_addr.sin_addr.s_addr=inet_addr(BCast);
 				n=sendto(sockfd, feedback, MSG_SIZE, 0, (struct sockaddr *)&cli_addr, Len);
+				printf("\nSendto\n");
 				//FeedBack Check
 				if(n<0)
 				{
@@ -186,14 +188,15 @@ unsigned int rAddr;
 					return 0;
 				}
 				
-				recvfrom(sockfd, Buffer, MSG_SIZE, 0, (struct sockaddr *)&cli_addr, &Len);
-				printf("\nRecieved Message(In Switch): %s\n", Buffer);
+				//recvfrom(sockfd, Buffer, MSG_SIZE, 0, (struct sockaddr *)&cli_addr, &Len);
+				//printf("\nRecieved Message(In Switch): %s\n", Buffer);
 				Champ=1;
 
 				break;
-			
-
-		;}		
+			default:
+				printf("\nIn Switch\n");
+				break;
+		}		
 
 
 	}
