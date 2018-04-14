@@ -19,8 +19,16 @@
 #include <arpa/inet.h>
 #include <math.h>
 #include <time.h>
+//to collect IP libraries
+#include <ifaddrs.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+
 
 #define MSG_SIZE 40
+//Global Variables
+char *My_IP;
+int sockfd;
 
 //method to check the msg received from the client
 int messageCheck(const char *msg)
@@ -36,7 +44,17 @@ int messageCheck(const char *msg)
 	   return 0;
 
 }
+void collectIP(void)
+{
+	//interface request
+	struct ifreq myReq;
+	myReq.ifr_addr.sa_family = AF_INET;
 
+	snprintf( myReq.ifr_name, IFNAMSIZ, "wlan0" );
+	ioctl( sockfd, SIOCGIFADDR, &myReq );	
+
+	My_IP = inet_ntoa( ((struct sockaddr_in *)&myReq.ifr_addr)->sin_addr );
+}
 
 int main(int argc, char *argv[]) {
 	
@@ -52,7 +70,6 @@ int main(int argc, char *argv[]) {
 	//Some Variables
 	int PORT= atoi(argv[1]);
 	char My_Message[MSG_SIZE]= "Taz on 128.206.19.15 is the master";
-	char My_IP[]="128.206.19.15";
 	char BCast[]="128.206.19.255";
 
 	struct sockaddr_in server_addr, cli_addr;	
@@ -64,7 +81,7 @@ int main(int argc, char *argv[]) {
 
 
 	//Creating Socket & Check
-	int sockfd= socket(AF_INET, SOCK_DGRAM, 0);
+	sockfd= socket(AF_INET, SOCK_DGRAM, 0);
 	if(sockfd<0)
 	{
 		printf("\nCreating Socket Error\n");
@@ -93,6 +110,7 @@ int main(int argc, char *argv[]) {
         }
 
 //	printf("\nAfter Binding Socket\n");
+	collectIP();
 	//BroadCast setup
 	cli_addr.sin_addr.s_addr=inet_addr(BCast);
 	cli_addr.sin_port= htons(PORT);
@@ -104,9 +122,9 @@ int main(int argc, char *argv[]) {
 		printf("\nBroadCast Setup Error");
 		return 0;
 	}	
-//printf("\nBefore While Loop\n");
 
-//--------------------------------------------------------------------------
+	
+//------------------------------------------------------------------------
 //While Loop
 int Champ=0;
 int randomNum;
@@ -140,18 +158,26 @@ unsigned int rAddr;
 				if(Buffer[0]=='#')
 				{
 					//printf("\n0\n");
-					sscanf(My_IP, "# %*u.%*u.%*u.%u %*u",&rAddr);
+					sscanf(My_IP, "%*u.%*u.%*u.%u %*u",&rAddr);
 					//printf("\n1000000\n");
 					sscanf(Buffer, "# %*u.%*u.%*u.%u %u", &rIP, &rNum);
 					printf("\nRecieved Vote With => IP: %u\tNUM: %u\n", rIP,rNum);
 					//to determine if I'm the champ
 					if(rNum<randomNum)//if my num is greater
+					{
 						Champ= 1;
+					}
 					else if(rNum==randomNum)
-						if(rIP>rAddr)//compares the random generated numbers if equal
+					{
+					//	printf("\nRnum %u RandomNum %u", rNum,randomNum);
+					//	printf("\nrIP %u rAddr %u\n", rIP, rAddr);
+						if(rIP>=rAddr)//compares the random generated numbers if equal
 							Champ=0;
 						else
 							Champ=1;
+					}
+					else
+					Champ=0;
 				}
 				
 				break;
