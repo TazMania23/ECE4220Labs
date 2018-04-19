@@ -6,3 +6,73 @@ while(1){msleep()...}
 
 kthread should stop vs kthread stop
 create, wake up process, kthread stop, kthread should stop
+
+Building 3 kernel Modules to run at the same time
+
+
+Part 1 use previous speaker lab to get frequency (very close to previous)
+Do both then pick one that is better and talk about both in lab report
+
+Kthread
+Mapping not in thread (only bitmasking in thread) 
+2 registers one to set it high and one to set it low
+
+20mins
+
+Part 2
+button is function to determine which button is pressed
+when button 1 is pushed you will update the frequency 
+init module map to register gps select 0, configure all ports as inputs 
+enable and configure pull down
+
+increment to specific register and trigger it + interrupt 
+make a cleanup module to clear pins 
+
+20mins+ <- I will challenge this
+
+
+Part 3
+use Lab 5 server and add stuff
+If you are the master you will recieve @A, @B etc changes frequencies (Watch out from infinite loop. Don't accept Messages from myself basically)
+
+Send change frequency to kernel from server.
+
+Then the Master passes it on to the slaves
+If you are the slave you just change frequencies
+
+vim Makefile-> add in someting 
+sudo insmod Lab6_cdev_kmod.ko
+(look at .c one for instructions)
+device we can send things (gives us Major Number)
+mknod/device/YourDeviceName c MajorNumber 0
+
+
+Bonus is the read function
+if you push the button on the board then it sends the corrosponding frequency to everyone 
+
+
+User          Kernel
+      ---->   
+msg   <----   msg
+   Character Devide
+   
+   User opens up devic and reads or wites to the Kernel
+   gcc Lab 6 user make sure its in right directory
+   ./run no sudo 
+   
+Add to makefile below   
+obj-m += Lab6_cdev_kmod.o
+
+User is basically Lab 5 plus @A checks etc.
+
+2 Terminals 
+User        7 Lab6_client_WS
+
+You should Get @A twice if you are the master 
+
+
+
+
+
+2 Extra Credits
+Either button Push or Implement another way to send the message between User and Kernel besides character device
