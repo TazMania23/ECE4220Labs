@@ -53,7 +53,7 @@ int main( int argc, char * argv[] )
 	//socklen_t fromlen;
 	//struct sockaddr_in server;
 	//struct sockaddr_in addr;
-//	struct sockaddr_in rec;
+	//struct sockaddr_in rec;
 	char buffer[MAX_MSG];
 	int I_THE_MASTER = 0;
 	int cuteNumber;	
@@ -118,7 +118,7 @@ int main( int argc, char * argv[] )
 		fflush( stdout );	
 		if( !strcmp( buffer, "WHOIS\n" ) )
 		{
-			puts( "Doing WHOIS" );
+			//puts( "Doing WHOIS" );
 			if( I_THE_MASTER == 1 )
 			{
 				puts("I the master" );
@@ -132,7 +132,7 @@ int main( int argc, char * argv[] )
 		}
 		else if( !strcmp( buffer, "VOTE\n" ) )
 		{
-			puts( "WOW! It's time to elect another leader of the free world!" );
+			//puts( "WOW! It's time to elect another leader of the free world!" );
 
 		        cuteNumber = rand() % 10;
                         char voteReturn[18];
@@ -145,8 +145,8 @@ int main( int argc, char * argv[] )
 				error( "Sending Vote" );
 			}
 
-//	                recvfrom( sock, buffer, MAX_MSG, 0, (struct sockaddr *) &addr, &fromlen );
-//			printf( "\nReceived :: %s", buffer );
+			//recvfrom( sock, buffer, MAX_MSG, 0, (struct sockaddr *) &addr, &fromlen );
+			//printf( "\nReceived :: %s", buffer );
 
 
 			I_THE_MASTER = 1;
